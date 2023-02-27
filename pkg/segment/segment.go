@@ -5,6 +5,7 @@ import (
 
 	"github.com/NagayamaRyoga/jargon/pkg/segment/duration"
 	"github.com/NagayamaRyoga/jargon/pkg/segment/os"
+	"github.com/NagayamaRyoga/jargon/pkg/segment/path"
 	"github.com/NagayamaRyoga/jargon/pkg/segment/status"
 	"github.com/NagayamaRyoga/jargon/pkg/segment/types"
 	"github.com/NagayamaRyoga/jargon/pkg/segment/user"
@@ -15,6 +16,7 @@ type builder func(*types.Info) (*types.Segment, error)
 var segments = map[string]builder{
 	"os":       os.Build,
 	"user":     user.Build,
+	"path":     path.Build,
 	"status":   status.Build,
 	"duration": duration.Build,
 }

@@ -22,6 +22,7 @@ func Run(args *Args) error {
 	segments := []string{
 		"os",
 		"user",
+		"path",
 		"status",
 		"duration",
 	}
