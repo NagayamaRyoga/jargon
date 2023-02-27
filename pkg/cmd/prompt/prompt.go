@@ -21,6 +21,7 @@ func Run(args *Args) error {
 
 	segments := []string{
 		"status",
+		"duration",
 	}
 
 	if err := segment.DisplaySegments(info, segments); err != nil {

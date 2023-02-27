@@ -3,6 +3,7 @@ package segment
 import (
 	"fmt"
 
+	"github.com/NagayamaRyoga/jargon/pkg/segment/duration"
 	"github.com/NagayamaRyoga/jargon/pkg/segment/status"
 	"github.com/NagayamaRyoga/jargon/pkg/segment/types"
 )
@@ -10,7 +11,8 @@ import (
 type builder func(*types.Info) (*types.Segment, error)
 
 var segments = map[string]builder{
-	"status": status.Build,
+	"status":   status.Build,
+	"duration": duration.Build,
 }
 
 func buildSegment(info *types.Info, segmentName string) (*types.Segment, error) {
