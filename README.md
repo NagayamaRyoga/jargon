@@ -1,0 +1,3 @@
+# jargon
+
+Asynchronous ZSH prompt.
