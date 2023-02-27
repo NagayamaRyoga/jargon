@@ -11,5 +11,7 @@ var (
 )
 
 func main() {
-	cli.Run()
+	if err := cli.Run(); err != nil {
+		panic(err)
+	}
 }
