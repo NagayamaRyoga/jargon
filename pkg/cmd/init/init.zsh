@@ -2,17 +2,23 @@ jargon_chpwd() {
 }
 
 jargon_preexec() {
+  JARGON_START="${EPOCHREALTIME}"
 }
 
 jargon_precmd() {
+  JARGON_EXIT_STATUS="$?"
+  JARGON_JOBS="${#jobstates}"
+  local end="${EPOCHREALTIME}"
+  JARGON_DURATION="$((${end} - ${JARGON_START:-${end}}))"
+  unset JARGON_START
 }
 
 jargon_prompt() {
-  jargon prompt
+  jargon prompt --exit-status="${JARGON_EXIT_STATUS}" --duration="${JARGON_DURATION}" --jobs="${JARGON_JOBS}"
 }
 
 jargon_rprompt() {
-  jargon prompt --right
+  jargon prompt --right --exit-status="${JARGON_EXIT_STATUS}" --duration="${JARGON_DURATION}" --jobs="${JARGON_JOBS}"
 }
 
 autoload -Uz add-zsh-hook
