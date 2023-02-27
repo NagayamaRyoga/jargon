@@ -1,6 +1,9 @@
 package prompt
 
 import (
+	"context"
+
+	"github.com/NagayamaRyoga/jargon/pkg/git"
 	"github.com/NagayamaRyoga/jargon/pkg/segment"
 	"github.com/NagayamaRyoga/jargon/pkg/segment/types"
 )
@@ -13,16 +16,20 @@ type Args struct {
 }
 
 func Run(args *Args) error {
+	ctx := context.Background()
+
 	info := &types.Info{
 		ExitStatus: args.ExitStatus,
 		Duration:   args.Duration,
 		Jobs:       args.Jobs,
+		GitStatus:  git.LoadStatus(ctx),
 	}
 
 	segments := []string{
 		"os",
 		"user",
 		"path",
+		"git_status",
 		"status",
 		"duration",
 		"time",
