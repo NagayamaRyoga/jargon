@@ -14,11 +14,11 @@ jargon_precmd() {
 }
 
 jargon_prompt() {
-  jargon prompt --exit-status="${JARGON_EXIT_STATUS}" --duration="${JARGON_DURATION}" --jobs="${JARGON_JOBS}"
+  jargon prompt --exit-status="${JARGON_EXIT_STATUS}" --duration="${JARGON_DURATION}" --jobs="${JARGON_JOBS}" --width="$COLUMNS"
 }
 
 jargon_rprompt() {
-  jargon prompt --right --exit-status="${JARGON_EXIT_STATUS}" --duration="${JARGON_DURATION}" --jobs="${JARGON_JOBS}"
+  jargon prompt --right --exit-status="${JARGON_EXIT_STATUS}" --duration="${JARGON_DURATION}" --jobs="${JARGON_JOBS}" --width="$COLUMNS"
 }
 
 autoload -Uz add-zsh-hook

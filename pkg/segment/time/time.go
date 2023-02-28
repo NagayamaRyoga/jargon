@@ -24,6 +24,6 @@ func Build(info *types.Info) (*types.Segment, error) {
 
 	return &types.Segment{
 		Style:   style,
-		Content: fmt.Sprintf("%s %s", icon, now.Format("15:04:05")),
+		Content: fmt.Sprintf("%s %s", icon, now.Format("2006/01/02 15:04:05")),
 	}, nil
 }

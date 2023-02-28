@@ -19,5 +19,6 @@ type Info struct {
 	ExitStatus int
 	Duration   float64
 	Jobs       int
+	Width      int
 	GitStatus  *git.Status
 }
