@@ -30,7 +30,14 @@ func takeFirstNChars(s string, n int) string {
 	return string(runes[:n])
 }
 
-func shrink(cwd string, home string) string {
+func shrinkPathComponent(s string, n int) string {
+	if strings.HasPrefix(s, ".") {
+		return takeFirstNChars(s, n+1)
+	}
+	return takeFirstNChars(s, n)
+}
+
+func shrink(cwd string, home string, projectRoot string) string {
 	pathSegments := []string{}
 
 	p := cwd
@@ -51,12 +58,13 @@ func shrink(cwd string, home string) string {
 		}
 
 		base := path.Base(p)
-		if len(pathSegments) == 0 {
+
+		isCurrent := len(pathSegments) == 0
+		isProjectRoot := p == projectRoot
+		if isCurrent || isProjectRoot {
 			pathSegments = append(pathSegments, base)
-		} else if strings.HasPrefix(base, ".") {
-			pathSegments = append(pathSegments, takeFirstNChars(base, 2))
 		} else {
-			pathSegments = append(pathSegments, takeFirstNChars(base, 1))
+			pathSegments = append(pathSegments, shrinkPathComponent(base, 1))
 		}
 
 		p = parent
@@ -84,7 +92,12 @@ func Build(info *types.Info) (*types.Segment, error) {
 		home = ""
 	}
 
-	path := shrink(cwd, home)
+	var path string
+	if info.GitStatus != nil {
+		path = shrink(cwd, home, info.GitStatus.TopLevel)
+	} else {
+		path = shrink(cwd, home, "")
+	}
 
 	return &types.Segment{
 		Style:   style,

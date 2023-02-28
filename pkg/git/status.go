@@ -10,26 +10,35 @@ import (
 )
 
 type Status struct {
+	TopLevel string
 	Head     *HeadStatus
 	Worktree WorktreeStatus
 	Upstream UpstreamStatus
+	User     *UserStatus
 }
 
 func LoadStatus(ctx context.Context) *Status {
-	if err := exec.CommandContext(ctx, "git", "rev-parse").Run(); err != nil {
+	output, err := exec.CommandContext(ctx, "git", "rev-parse", "--show-toplevel").Output()
+	if err != nil {
 		return nil
 	}
 
-	s := &Status{}
+	s := &Status{
+		TopLevel: strings.Trim(string(output), "\r\n"),
+	}
 
 	var wg sync.WaitGroup
-	wg.Add(2)
+	wg.Add(3)
 	go func() {
 		s.Head = loadHead(ctx)
 		wg.Done()
 	}()
 	go func() {
 		s.Worktree, s.Upstream = loadWorktreeAndUpstream(ctx)
+		wg.Done()
+	}()
+	go func() {
+		s.User = loadUser(ctx)
 		wg.Done()
 	}()
 	wg.Wait()
@@ -53,7 +62,7 @@ type HeadStatus struct {
 func loadHead(ctx context.Context) *HeadStatus {
 	if output, err := exec.CommandContext(ctx, "git", "branch", "--show-current").Output(); err == nil {
 		branchName := string(output)
-		branchName = strings.Trim(branchName, " \r\n")
+		branchName = strings.Trim(branchName, "\r\n")
 		if len(branchName) > 0 {
 			return &HeadStatus{
 				Type:    HeadTypeBranch,
@@ -64,7 +73,7 @@ func loadHead(ctx context.Context) *HeadStatus {
 
 	if output, err := exec.CommandContext(ctx, "git", "tag", "--points-at", "HEAD").Output(); err == nil {
 		tagName, _, _ := strings.Cut(string(output), "\n")
-		tagName = strings.Trim(tagName, " \r\n")
+		tagName = strings.Trim(tagName, "\r\n")
 		if len(tagName) > 0 {
 			return &HeadStatus{
 				Type:    HeadTypeTag,
@@ -75,7 +84,7 @@ func loadHead(ctx context.Context) *HeadStatus {
 
 	if output, err := exec.CommandContext(ctx, "git", "rev-parse", "--short", "HEAD").Output(); err == nil {
 		sha := string(output)
-		sha = strings.Trim(sha, " \r\n")
+		sha = strings.Trim(sha, "\r\n")
 		return &HeadStatus{
 			Type:    HeadTypeCommit,
 			RefName: sha,
@@ -155,3 +164,21 @@ func loadWorktreeAndUpstream(ctx context.Context) (worktree WorktreeStatus, upst
 var upstreamRegex = regexp.MustCompile(`\[(ahead\s+(?P<ahead>\d+))?(,\s*)?(behind\s+(?P<behind>\d+))?\]`)
 var aheadSubexpIndex = upstreamRegex.SubexpIndex("ahead")
 var behindSubexpIndex = upstreamRegex.SubexpIndex("behind")
+
+type UserStatus struct {
+	Name string
+}
+
+func loadUser(ctx context.Context) *UserStatus {
+	output, err := exec.CommandContext(ctx, "git", "config", "user.name").Output()
+	if err != nil {
+		return nil
+	}
+
+	userName := string(output)
+	userName = strings.Trim(userName, "\r\n")
+
+	return &UserStatus{
+		Name: userName,
+	}
+}

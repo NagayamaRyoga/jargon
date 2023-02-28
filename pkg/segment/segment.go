@@ -5,6 +5,7 @@ import (
 
 	"github.com/NagayamaRyoga/jargon/pkg/segment/duration"
 	"github.com/NagayamaRyoga/jargon/pkg/segment/git_status"
+	"github.com/NagayamaRyoga/jargon/pkg/segment/git_user"
 	"github.com/NagayamaRyoga/jargon/pkg/segment/os"
 	"github.com/NagayamaRyoga/jargon/pkg/segment/path"
 	"github.com/NagayamaRyoga/jargon/pkg/segment/status"
@@ -23,6 +24,7 @@ var segments = map[string]builder{
 	"duration":   duration.Build,
 	"time":       time.Build,
 	"git_status": git_status.Build,
+	"git_user":   git_user.Build,
 }
 
 func buildSegment(info *types.Info, segmentName string) (*types.Segment, error) {

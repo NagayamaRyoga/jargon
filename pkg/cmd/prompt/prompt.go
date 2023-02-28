@@ -30,6 +30,7 @@ func Run(args *Args) error {
 		"user",
 		"path",
 		"git_status",
+		"git_user",
 		"status",
 		"duration",
 		"time",
