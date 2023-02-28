@@ -1,10 +1,10 @@
 package prompt
 
 import (
-	"context"
 	"os"
 
-	"github.com/NagayamaRyoga/jargon/pkg/git"
+	"github.com/NagayamaRyoga/jargon/pkg/info"
+	"github.com/NagayamaRyoga/jargon/pkg/info/git"
 	"github.com/NagayamaRyoga/jargon/pkg/segment"
 	"github.com/NagayamaRyoga/jargon/pkg/segment/types"
 )
@@ -15,6 +15,7 @@ type Args struct {
 	Duration   float64 `help:"The command duration of the last command"`
 	Jobs       int     `help:"The number of currently running jobs"`
 	Width      int     `help:"Column width"`
+	DataGit    string  `help:"Output of 'jargon prepare --source=git'"`
 }
 
 type line struct {
@@ -23,14 +24,17 @@ type line struct {
 }
 
 func Run(args *Args) error {
-	ctx := context.Background()
+	gitStatus, err := info.Decode[git.Status](args.DataGit)
+	if err != nil {
+		return err
+	}
 
 	info := &types.Info{
 		ExitStatus: args.ExitStatus,
 		Duration:   args.Duration,
 		Jobs:       args.Jobs,
 		Width:      args.Width,
-		GitStatus:  git.LoadStatus(ctx),
+		GitStatus:  gitStatus,
 	}
 
 	segmentLines := []line{

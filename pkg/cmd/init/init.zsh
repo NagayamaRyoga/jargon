@@ -6,6 +6,8 @@ jargon_preexec() {
 }
 
 jargon_precmd() {
+  JARGON_GIT_INFO="$(jargon prepare --source=git)"
+
   JARGON_EXIT_STATUS="$?"
   JARGON_JOBS="${#jobstates}"
   local end="${EPOCHREALTIME}"
@@ -14,11 +16,11 @@ jargon_precmd() {
 }
 
 jargon_prompt() {
-  jargon prompt --exit-status="${JARGON_EXIT_STATUS}" --duration="${JARGON_DURATION}" --jobs="${JARGON_JOBS}" --width="$COLUMNS"
+  jargon prompt --exit-status="${JARGON_EXIT_STATUS}" --duration="${JARGON_DURATION}" --jobs="${JARGON_JOBS}" --width="$COLUMNS" --data-git="$JARGON_GIT_INFO"
 }
 
 jargon_rprompt() {
-  jargon prompt --right --exit-status="${JARGON_EXIT_STATUS}" --duration="${JARGON_DURATION}" --jobs="${JARGON_JOBS}" --width="$COLUMNS"
+  jargon prompt --right --exit-status="${JARGON_EXIT_STATUS}" --duration="${JARGON_DURATION}" --jobs="${JARGON_JOBS}" --width="$COLUMNS" --data-git="$JARGON_GIT_INFO"
 }
 
 autoload -Uz add-zsh-hook

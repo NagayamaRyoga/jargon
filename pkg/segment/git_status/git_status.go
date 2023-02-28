@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/NagayamaRyoga/jargon/pkg/ansi"
-	"github.com/NagayamaRyoga/jargon/pkg/git"
+	"github.com/NagayamaRyoga/jargon/pkg/info/git"
 	"github.com/NagayamaRyoga/jargon/pkg/segment/types"
 )
 

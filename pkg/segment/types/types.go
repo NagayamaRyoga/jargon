@@ -2,7 +2,7 @@ package types
 
 import (
 	"github.com/NagayamaRyoga/jargon/pkg/ansi"
-	"github.com/NagayamaRyoga/jargon/pkg/git"
+	"github.com/NagayamaRyoga/jargon/pkg/info/git"
 )
 
 type Style struct {
