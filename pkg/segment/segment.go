@@ -44,6 +44,10 @@ var segments = map[string]builder{
 	"git_user":   git_user.Build,
 }
 
+func escape(content string) string {
+	return strings.ReplaceAll(content, "%", "%%")
+}
+
 func buildSegment(info *types.Info, segmentName string) (*types.Segment, error) {
 	if builder, ok := segments[segmentName]; ok {
 		return builder(info)
@@ -99,7 +103,7 @@ func displayLeftSegments(w io.Writer, segments []*types.Segment) int {
 			seg.Style.Background.Background(),
 			seg.Style.Foreground.Foreground(),
 			controlEnd,
-			seg.Content,
+			escape(seg.Content),
 			controlStart,
 			ansi.ANSIReset,
 			controlEnd,
@@ -168,7 +172,7 @@ func displayRightSegments(w io.Writer, segments []*types.Segment) int {
 			seg.Style.Background.Background(),
 			seg.Style.Foreground.Foreground(),
 			controlEnd,
-			seg.Content,
+			escape(seg.Content),
 			controlStart,
 			ansi.ANSIReset,
 			controlEnd,
