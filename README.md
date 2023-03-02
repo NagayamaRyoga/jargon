@@ -2,6 +2,8 @@
 
 Asynchronous ZSH prompt.
 
+![](docs/screenshot.png)
+
 ## Usage
 
 ```sh
