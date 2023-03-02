@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/NagayamaRyoga/jargon/pkg/info"
+	"github.com/NagayamaRyoga/jargon/pkg/info/gh"
 	"github.com/NagayamaRyoga/jargon/pkg/info/git"
 	"github.com/NagayamaRyoga/jargon/pkg/segment"
 	"github.com/NagayamaRyoga/jargon/pkg/segment/types"
@@ -16,6 +17,7 @@ type Args struct {
 	Jobs       int     `help:"The number of currently running jobs"`
 	Width      int     `help:"Column width"`
 	DataGit    string  `help:"Output of 'jargon prepare --source=git'"`
+	DataGh     string  `help:"Output of 'jargon prepare --source=gh'"`
 }
 
 type line struct {
@@ -29,12 +31,18 @@ func Run(args *Args) error {
 		return err
 	}
 
+	ghStatus, err := info.Decode[gh.Status](args.DataGh)
+	if err != nil {
+		return err
+	}
+
 	info := &types.Info{
 		ExitStatus: args.ExitStatus,
 		Duration:   args.Duration,
 		Jobs:       args.Jobs,
 		Width:      args.Width,
 		GitStatus:  gitStatus,
+		GhStatus:   ghStatus,
 	}
 
 	segmentLines := []line{
@@ -44,6 +52,7 @@ func Run(args *Args) error {
 				"user",
 				"path",
 				"git_status",
+				"gh_pull_request",
 				"git_user",
 			},
 			right: []string{

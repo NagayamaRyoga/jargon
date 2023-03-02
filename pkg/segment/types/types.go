@@ -2,6 +2,7 @@ package types
 
 import (
 	"github.com/NagayamaRyoga/jargon/pkg/ansi"
+	"github.com/NagayamaRyoga/jargon/pkg/info/gh"
 	"github.com/NagayamaRyoga/jargon/pkg/info/git"
 )
 
@@ -21,4 +22,5 @@ type Info struct {
 	Jobs       int
 	Width      int
 	GitStatus  *git.Status
+	GhStatus   *gh.Status
 }

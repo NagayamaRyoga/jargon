@@ -7,6 +7,7 @@ import (
 
 	"github.com/NagayamaRyoga/jargon/pkg/ansi"
 	"github.com/NagayamaRyoga/jargon/pkg/segment/duration"
+	"github.com/NagayamaRyoga/jargon/pkg/segment/gh_pull_request"
 	"github.com/NagayamaRyoga/jargon/pkg/segment/git_status"
 	"github.com/NagayamaRyoga/jargon/pkg/segment/git_user"
 	"github.com/NagayamaRyoga/jargon/pkg/segment/os"
@@ -34,14 +35,15 @@ var (
 type builder func(*types.Info) (*types.Segment, error)
 
 var segments = map[string]builder{
-	"os":         os.Build,
-	"user":       user.Build,
-	"path":       path.Build,
-	"status":     status.Build,
-	"duration":   duration.Build,
-	"time":       time.Build,
-	"git_status": git_status.Build,
-	"git_user":   git_user.Build,
+	"os":              os.Build,
+	"user":            user.Build,
+	"path":            path.Build,
+	"status":          status.Build,
+	"duration":        duration.Build,
+	"time":            time.Build,
+	"git_status":      git_status.Build,
+	"git_user":        git_user.Build,
+	"gh_pull_request": gh_pull_request.Build,
 }
 
 func escape(content string) string {
