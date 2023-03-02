@@ -6,6 +6,7 @@ import (
 	"github.com/NagayamaRyoga/jargon/pkg/info"
 	"github.com/NagayamaRyoga/jargon/pkg/info/gh"
 	"github.com/NagayamaRyoga/jargon/pkg/info/git"
+	"github.com/NagayamaRyoga/jargon/pkg/info/glab"
 	"github.com/NagayamaRyoga/jargon/pkg/segment"
 	"github.com/NagayamaRyoga/jargon/pkg/segment/types"
 )
@@ -18,6 +19,7 @@ type Args struct {
 	Width      int     `help:"Column width"`
 	DataGit    string  `help:"Output of 'jargon prepare --source=git'"`
 	DataGh     string  `help:"Output of 'jargon prepare --source=gh'"`
+	DataGlab   string  `help:"Output of 'jargon prepare --source=glab'"`
 }
 
 type line struct {
@@ -28,12 +30,17 @@ type line struct {
 func Run(args *Args) error {
 	gitStatus, err := info.Decode[git.Status](args.DataGit)
 	if err != nil {
-		return err
+		gitStatus = nil
 	}
 
 	ghStatus, err := info.Decode[gh.Status](args.DataGh)
 	if err != nil {
-		return err
+		ghStatus = nil
+	}
+
+	glabStatus, err := info.Decode[glab.Status](args.DataGlab)
+	if err != nil {
+		glabStatus = nil
 	}
 
 	info := &types.Info{
@@ -43,6 +50,7 @@ func Run(args *Args) error {
 		Width:      args.Width,
 		GitStatus:  gitStatus,
 		GhStatus:   ghStatus,
+		GlabStatus: glabStatus,
 	}
 
 	segmentLines := []line{
@@ -53,6 +61,7 @@ func Run(args *Args) error {
 				"path",
 				"git_status",
 				"gh_pull_request",
+				"glab_merge_request",
 				"git_user",
 			},
 			right: []string{

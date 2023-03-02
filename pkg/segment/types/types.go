@@ -4,6 +4,7 @@ import (
 	"github.com/NagayamaRyoga/jargon/pkg/ansi"
 	"github.com/NagayamaRyoga/jargon/pkg/info/gh"
 	"github.com/NagayamaRyoga/jargon/pkg/info/git"
+	"github.com/NagayamaRyoga/jargon/pkg/info/glab"
 )
 
 type Style struct {
@@ -23,4 +24,5 @@ type Info struct {
 	Width      int
 	GitStatus  *git.Status
 	GhStatus   *gh.Status
+	GlabStatus *glab.Status
 }
