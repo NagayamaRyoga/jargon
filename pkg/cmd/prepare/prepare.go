@@ -7,29 +7,15 @@ import (
 	"github.com/NagayamaRyoga/jargon/pkg/info"
 	"github.com/NagayamaRyoga/jargon/pkg/info/gh"
 	"github.com/NagayamaRyoga/jargon/pkg/info/git"
+	"github.com/NagayamaRyoga/jargon/pkg/info/glab"
 )
 
 type Args struct {
 	Source string `help:"git, gh, or glab"`
 }
 
-func prepareGit(ctx context.Context) error {
-	status := git.LoadStatus(ctx)
-	if status == nil {
-		return nil
-	}
-
-	encoded, err := info.Encode(status)
-	if err != nil {
-		return err
-	}
-
-	fmt.Print(encoded)
-	return nil
-}
-
-func prepareGh(ctx context.Context) error {
-	status := gh.LoadStatus(ctx)
+func prepare[T any](ctx context.Context, loadStatus func(context.Context) *T) error {
+	status := loadStatus(ctx)
 	if status == nil {
 		return nil
 	}
@@ -48,11 +34,11 @@ func Run(args *Args) error {
 
 	switch args.Source {
 	case "git":
-		return prepareGit(ctx)
+		return prepare(ctx, git.LoadStatus)
 	case "gh":
-		return prepareGh(ctx)
+		return prepare(ctx, gh.LoadStatus)
 	case "glab":
-		panic(0)
+		return prepare(ctx, glab.LoadStatus)
 	default:
 		panic(args.Source)
 	}

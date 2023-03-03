@@ -3,6 +3,7 @@ package glab
 import (
 	"context"
 	"fmt"
+	"os"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -20,9 +21,11 @@ type MergeRequest struct {
 }
 
 func LoadStatus(ctx context.Context) *Status {
-	output, err := exec.CommandContext(ctx, "gh", "pr", "view", "--json=number,state,comments,reviews,isDraft").Output()
+	cmd := exec.CommandContext(ctx, "glab", "mr", "view")
+	cmd.Stdin = strings.NewReader("\n")
+	output, err := cmd.Output()
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 		return nil
 	}
 

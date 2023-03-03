@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
 	"os/exec"
 )
 
@@ -21,7 +22,7 @@ type PullRequest struct {
 func LoadStatus(ctx context.Context) *Status {
 	output, err := exec.CommandContext(ctx, "gh", "pr", "view", "--json=number,state,comments,reviews,isDraft").Output()
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 		return nil
 	}
 
@@ -35,7 +36,7 @@ func LoadStatus(ctx context.Context) *Status {
 
 	var pr prResponse
 	if err := json.Unmarshal(output, &pr); err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 		return nil
 	}
 
