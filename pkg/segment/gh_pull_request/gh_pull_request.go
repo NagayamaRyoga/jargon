@@ -12,7 +12,7 @@ const (
 	draftIcon   string = ""
 	closedIcon  string = ""
 	mergedIcon  string = ""
-	commentIcon string = " "
+	commentIcon string = ""
 )
 
 var (

@@ -12,7 +12,7 @@ const (
 	draftIcon   string = ""
 	closedIcon  string = ""
 	mergedIcon  string = ""
-	commentIcon string = " "
+	commentIcon string = ""
 )
 
 var (
@@ -43,7 +43,7 @@ func Build(info *types.Info) (*types.Segment, error) {
 
 	var content string
 
-	content += fmt.Sprintf("%s %d", glabIcon, mr.Number)
+	content += fmt.Sprintf("%s !%d", glabIcon, mr.Number)
 
 	var style types.Style
 	switch {
